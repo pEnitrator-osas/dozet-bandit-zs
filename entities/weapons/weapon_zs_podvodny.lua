@@ -64,11 +64,11 @@ SWEP.ShowWorldModel = false
 
 SWEP.ReloadSound = Sound("Weapon_AWP.ClipOut")
 SWEP.Primary.Sound = Sound("npc/env_headcrabcanister/launch.wav")
-SWEP.Primary.Damage = 26
+SWEP.Primary.Damage = 22
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.26
-SWEP.Recoil = 0.79
-SWEP.DefaultRecoil = 0.89
+SWEP.Recoil = 0.89
+SWEP.DefaultRecoil = 0.99
 SWEP.Primary.ClipSize = 26
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "XBowBolt"

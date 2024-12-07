@@ -95,7 +95,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 			local stat = ent:GiveStatus("bleed")
 			if stat and stat:IsValid() then
                 print(bleed,"2")
-				stat:SetDamage(15)
+				stat:SetDamage(25)
 				stat.Damager = owner
 			end
 		end

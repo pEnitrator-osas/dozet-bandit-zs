@@ -87,13 +87,10 @@ SWEP.SwingTime = 0.6
 SWEP.SwingRotation = Angle(0, -20, -40)
 SWEP.SwingOffset = Vector(10, 0, 0)
 SWEP.SwingHoldType = "melee"
-
-
-SWEP.m_IsStealthWeapon = true
-SWEP.StealthMeterTick = 0.05
-SWEP.LastStealthMeterCheck = 0
 SWEP.NextDMG = 0
 
+SWEP.m_IsStealthWeapon = true
+SWEP.StealthMeterTick = 0.1
 SWEP.LastStealthMeterCheck = 0
 
 function SWEP:SetupDataTables()
@@ -105,13 +102,22 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Think()
+	if SERVER then
+		
+		if GAMEMODE:GetWaveActive() == true  then 
+			if self.NextDMG < CurTime() then
+				local owner = self:GetOwner()
+				owner:SetHealth(math.max(1, owner:Health() - 1))
+				self.NextDMG = CurTime() + 1.5
+			end
+		end
+	end
 	local curTime = CurTime()
-	local moverate = math.Clamp(self:GetOwner():GetVelocity():Length() / self.WalkSpeed, 0,1)*-3+1
 	if curTime >= self.LastStealthMeterCheck+self.StealthMeterTick then
-		self:SetStealthMeter(math.Clamp(self:GetStealthMeter()+moverate,0,100))
+		self:SetStealthMeter(math.Clamp(self:GetStealthMeter()+1,0,100))
 		self.LastStealthMeterCheck = curTime
 	end
-	self:SetStealthWepBlend(1-math.Clamp(self:GetStealthMeter()/100,0,1)*0.85)
+	self:SetStealthWepBlend(1-math.Clamp(self:GetStealthMeter()/100,0,1)*0.99)
 	self.BaseClass.Think(self)	
 end
 
@@ -127,9 +133,9 @@ function SWEP:Deploy()
 end
 function SWEP:Holster(wep)
 	if self:GetOwner() and self:GetOwner():IsPlayer() then
-		self:GetOwner():DrawShadow(true)
+		self:GetOwner():DrawShadow(false)
 	end
-	self:DrawShadow(true)
+	self:DrawShadow(false)
 	return self.BaseClass.Holster(self)
 end
 
@@ -203,18 +209,4 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 			end
 		end
 	end
-end
-
-function SWEP:Think()
-	if SERVER then
-		
-		if GAMEMODE:GetWaveActive() == true  then 
-			if self.NextDMG < CurTime() then
-				local owner = self:GetOwner()
-				owner:SetHealth(math.max(1, owner:Health() - 1))
-				self.NextDMG = CurTime() + 1.5
-			end
-		end
-	end
-	self.BaseClass.Think(self)
 end

@@ -47,12 +47,12 @@ SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 SWEP.UseHands = true
 
-SWEP.Primary.Damage = 39
+SWEP.Primary.Damage = 50
 SWEP.Primary.BurstDamage = 11
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.25
+SWEP.Primary.Delay = 0.20
 SWEP.Primary.KnockbackScale = 2
-SWEP.Recoil = 1.6
+SWEP.Recoil = 1.5
 SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"

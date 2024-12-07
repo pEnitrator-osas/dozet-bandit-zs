@@ -263,7 +263,6 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_skill_is_unlocked")
 	util.AddNetworkString("zs_skills_all_desired")
 	util.AddNetworkString("zs_skill_set_desired")
-	util.AddNetworkString("zs_secret")
 	
 	util.AddNetworkString("zs_stand_become")
 	util.AddNetworkString("zs_skills_init")
@@ -3185,7 +3184,7 @@ function GM:WaveEnded()
 	end
 	timer.Simple(1, function() self:SetCurrentWaveWinner(nil) end)
 end
-local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera', "urmteam", "palka"}
+local specialwaves = {"1hp", "anubis", "aos", "doa", 'coldera', "urmteam", "palka"}
 function GM:ActivateSpecialWave(force)
 	local wave = ""
 	if force then
@@ -3201,8 +3200,6 @@ function GM:ActivateSpecialWave(force)
 	self.SpecialWave = wave
 	if wave == "1hp" then
 		timer.Simple(0.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetHealth(1) end end end)
-	elseif wave == "old" then
-		timer.Simple(2.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:ApplySkills({}) pl:SendLua('MySelf:ApplySkills()') end end end)
 	elseif wave == "urmteam" then
 		local randmodel = player.GetAll()[math.random(1,#player.GetAll())]:GetModel()
 		timer.Simple(.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetModel(randmodel) pl:SetColor(COLOR_RED) 	pl:SetNoCollideWithTeammates(false) end end end)
@@ -3230,7 +3227,7 @@ function GM:ActivateSpecialWave(force)
 				end
 			end
 		end)
-		gamemode.Call("SetWaveStart", CurTime()+60)
+		gamemode.Call("SetWaveStart", CurTime()+100)
 		GAMEMODE:SetWave(GAMEMODE:GetWave()-1)
 		SetGlobalBool("waveactive", false)
 	end

@@ -43,9 +43,6 @@ net.Receive("zs_skill_set_desired", function(length, pl)
 	end
 	pl:SetDesiredActiveSkills(desired)
 end)
-net.Receive("zs_secret", function(length, pl)
-	pl:AddZSXP(500000)
-end)
 
 net.Receive("zs_skill_is_unlocked", function(length, pl)
 	local skillid = net.ReadUInt(16)

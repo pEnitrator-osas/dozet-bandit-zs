@@ -31,7 +31,7 @@ SWEP.BoxPhysicsMax = Vector(0.70365, 2.501825, 19.973375) * SWEP.ModelScale
 SWEP.MeleeDamage = 7
 SWEP.MeleeRange = 52
 SWEP.MeleeSize = 0.875
-SWEP.Primary.Delay = 0.22
+SWEP.Primary.Delay = 0.26
 
 SWEP.Stamina = 7
 

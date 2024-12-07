@@ -83,7 +83,7 @@ if CLIENT then
 	}
 end
 
-SWEP.MeleeDamage = 23
+SWEP.MeleeDamage = 30
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5
 SWEP.MeleeKnockBack = 32
@@ -97,9 +97,9 @@ SWEP.UseHands = true
 
 SWEP.HoldType = "melee2"
 
-SWEP.Stamina = 12
+SWEP.Stamina = 16
 
-SWEP.Primary.Delay = 0.6
+SWEP.Primary.Delay = 0.4
 SWEP.WalkSpeed = SPEED_FAST
 
 SWEP.SwingTime = 1.21	
@@ -148,7 +148,7 @@ function SWEP:HaveAbility()
 	if self:GetDTFloat(13) < CurTime() then
 		timer.Simple(0.6, function() 
 			if IsValid(self) then
-				self:ShootBullets(70, 1, math.random(0.02,0.1)) 
+				self:ShootBullets(75, 1, 0.1) 
 				self:EmitSound(self.BumBah)
 
 				self:GetOwner():ViewPunch(Angle(math.Rand(-20 * 2, 0), math.Rand(-1, 20), 0))

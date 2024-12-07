@@ -14,7 +14,6 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.Delay = 1.2
 SWEP.BlockMode = nil
 SWEP.Charge = true
-SWEP.ParryWindow = 1
 
 SWEP.MeleeDamage = 30
 SWEP.MeleeRange = 65
@@ -30,8 +29,6 @@ SWEP.DamageMulBlock = 0.4
 
 SWEP.Stamina = 33
 
-SWEP.HealFromBleed = false
-SWEP.OverHeal = 0
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
@@ -77,7 +74,6 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 22, "ChargeBlock")
 	self:NetworkVar("Float", 23, "GetAttackCharge")
 	self:NetworkVar("Float", 24, "ParryTime")
-	self:NetworkVar("Float", 25, "ParryCD")
 end
 
 function SWEP:SetWeaponSwingHoldType(t)
@@ -89,7 +85,6 @@ function SWEP:SetWeaponSwingHoldType(t)
 end
 
 function SWEP:Deploy()
-	self:SetParryCD(0)
 	gamemode.Call("WeaponDeployed", self:GetOwner(), self)
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 
@@ -101,6 +96,7 @@ function SWEP:Think()
 		self.IdleAnimation = nil
 		self:SendWeaponAnim(ACT_VM_IDLE)
 	end
+
 	if self:IsSwinging() and self:GetSwingEnd() <= CurTime() then
 		self:StopSwinging()
 		self:MeleeSwing()
@@ -112,16 +108,16 @@ function SWEP:Think()
 			self:SetWeaponSwingHoldType(self.SwingHoldType)
 			self:SetChargeBlock(false)
 			self:SetParryTime(0)  
-			self:GetOwner():RemoveStatus("parry_state",false,true)
+			self.UsedParry = false
 		end
 	end
-	if self:GetParryTime() > CurTime() and SERVER and self:GetParryCD() <= CurTime() then
+	if self:GetParryTime() > CurTime() and SERVER and !self.UsedParry then
 		local owner = self:GetOwner()
 		local parry = owner:GiveStatus("parry_state")
-		parry:SetTime(self.ParryWindow+(owner:IsSkillActive(SKILL_PARRY_SLOW) and 0.3 or 0))
-		self:SetParryCD(CurTime() + parry:GetTime()*5)
+		parry:SetTime(0.6+(owner:IsSkillActive(SKILL_PARRY_SLOW) and 0.3 or 0))
 		self:SetParryTime(0)
-	end	
+		self.UsedParry = true
+	end
 
 	--[[if CLIENT then
 		self:Anim_Think()
@@ -182,7 +178,7 @@ function SWEP:SecondaryAttack()
 				self:SetNextSecondaryFire(CurTime()+0.7)
 			end
 			if owner:KeyDown(IN_RELOAD) then return end
-			if self:GetOwner():KeyPressed(IN_ATTACK2) then self:SetParryTime(CurTime()+0.1) end
+			self:SetParryTime(CurTime()+0.1)
 		end
 	end
 end

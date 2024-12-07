@@ -107,7 +107,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	local owner = self:GetOwner()
 	if ent:IsPlayer() and SERVER then
 		local burned = ent:GiveStatus('burn')
-		burned:AddTime(2)
+		burned:AddTime(2.5)
 		burned.Damager = owner
 		burned.Damage = 3
 	end

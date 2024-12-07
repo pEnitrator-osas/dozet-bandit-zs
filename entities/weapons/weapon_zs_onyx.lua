@@ -63,7 +63,7 @@ SWEP.WorldModel = "models/weapons/w_snip_sg550.mdl"
 SWEP.UseHands = true
 
 SWEP.Primary.Sound = Sound("weapons/sg550/sg550-1.wav")
-SWEP.Primary.Damage = 60
+SWEP.Primary.Damage = 50
 SWEP.Primary.NumShots =1
 SWEP.Primary.Delay = 1
 
@@ -118,7 +118,7 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 	if SERVER then
 		local wep = attacker:GetActiveWeapon()
 		if ent:IsPlayer() then
-			ent:SetNWFloat("halotime_mark",CurTime()+7)
+			ent:SetNWFloat("halotime_mark",CurTime()+19)
 		end
 	end
 end

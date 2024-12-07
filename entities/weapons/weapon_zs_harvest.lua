@@ -85,15 +85,15 @@ SWEP.HitDecal = "Manhackcut"
 SWEP.TranslateName = "weapon_harvest_name"
 SWEP.TranslateDesc = "weapon_harvest_desc"
 
-SWEP.MeleeDamage = 35
-SWEP.MeleeRange = 90
+SWEP.MeleeDamage = 40
+SWEP.MeleeRange = 87
 SWEP.MeleeSize = 1.5
 SWEP.Stamina = 36
 
 SWEP.Tier = 5
 
 
-SWEP.WalkSpeed = 220
+SWEP.WalkSpeed = 210
 
 
 SWEP.Primary.Delay = 0.6

@@ -139,27 +139,32 @@ function meta:Dismember(dismembermenttype)
 end
 
 function meta:ApplyAdrenaline()
-	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +5
-	self.AdrenalineNoUse = CurTime() + 8
-	self:ResetSpeed() 
-	if SERVER then 
-		self.HealthDead = (self.HealthDead or 0) + 10
-		self:SetMaxHealth(self.HealthForADR -self.HealthDead)
-		if GAMEMODE:GetSpecialWave() ~= "1hp" then 
-			if self:IsSkillActive(SKILL_ADRENALINE_HP) then
-				self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
-			else
-				self:SetHealth(math.min(self:Health(), self:GetMaxHealth()))
+	if GAMEMODE:GetWaveActive() == false then 
+		print("Not buy before the start round")
+		return false 
+	else
+		self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +10
+		self.AdrenalineNoUse = CurTime() + 8
+		self:ResetSpeed() 
+		if SERVER then 
+			self.HealthDead = (self.HealthDead or 0) + 10
+			self:SetMaxHealth(self.HealthForADR -self.HealthDead)
+			if GAMEMODE:GetSpecialWave() ~= "1hp" then 
+				if self:IsSkillActive(SKILL_ADRENALINE_HP) then
+					self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
+				else
+					self:SetHealth(math.min(self:Health(), self:GetMaxHealth()))
+				end
 			end
-		end
+		end	
 	end
 	self:EmitSound("player/suit_sprint.wav")	
 	return true
 end
 
 function meta:WearBodyArmor()
+	self:ResetSpeed() 
 	self:SetBodyArmor(100 - self:GetBloodArmor())
-	self:ResetSpeed()
 	self:EmitSound("npc/combine_soldier/gear"..math.random(6)..".wav")
 	return true
 end
@@ -208,9 +213,7 @@ function meta:HealHealth(toheal,healer, wep, ignorebio)
 		end
 		return
 	end
-	if self:Health() < self:GetMaxHealth() then
-		self:SetHealth(newhealth)
-	end
+	self:SetHealth(newhealth)
 	if SERVER and toheal >= 5 then
 		self:PurgeStatusEffects()
 	end

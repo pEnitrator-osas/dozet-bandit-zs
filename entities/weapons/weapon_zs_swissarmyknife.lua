@@ -59,7 +59,7 @@ function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 	if self.m_BackStabbing then
 		self.m_BackStabbing = false
 
-		self.MeleeDamage = self.MeleeDamage / 1.2
+		self.MeleeDamage = self.MeleeDamage / 1.7
 	end
 end
 

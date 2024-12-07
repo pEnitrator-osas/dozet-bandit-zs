@@ -132,16 +132,6 @@ SWEP.SwingHoldType = "melee"
 
 SWEP.typechangedelay = 0
 
-function SWEP:OnMeleeHit(hitent, hitflesh, tr)
-	local ent = tr.Entity
-	local owner = self:GetOwner()
-	if ent:IsPlayer() and SERVER then
-		local burned = ent:GiveStatus('burn')
-		burned:AddTime(1)
-		burned.Damager = owner
-		burned.Damage = 7
-	end
-end
 
 function SWEP:DrawHUD()
 	local scrW = ScrW()

@@ -113,6 +113,29 @@ SWEP.typechangedelay = 0
 
 if SERVER then
 
+    local iswaveactive = GAMEMODE:GetWaveActive()
+
+    function SWEP:Think()
+        local iscurrentwaveactive = GAMEMODE:GetWaveActive()
+        local owner = self:GetOwner()
+        if (iswaveactive != iscurrentwaveactive) && (iscurrentwaveactive == false) then
+            local hasweapon = false
+            for _,wep in pairs(owner:GetWeapons()) do
+                if IsValid(wep) && wep:GetClass() == "weapon_zs_moment" then
+                    hasweapon = true
+                    break
+                end
+            end
+            if hasweapon then
+                if (owner:Team() == TEAM_HUMAN or owner:Team() == TEAM_BANDIT) and owner:Alive() then
+                    owner.pl_point_pos = owner:GetPos()
+                end 
+            end
+        end
+        iswaveactive = iscurrentwaveactive
+        self.BaseClass.Think(self)
+    end
+
     hook.Add("KeyPress","GoU",function(pl,key) 
         
         local curwep = pl:GetActiveWeapon()

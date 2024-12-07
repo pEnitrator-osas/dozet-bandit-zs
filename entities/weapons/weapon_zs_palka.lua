@@ -383,12 +383,6 @@ function(self, pl, time, pos)
 	end
 end, "Бросьте камень.", OffensiveColor}, "came")
 
-AddMagic(SWEP, {"Тилипопато",
-function(self, pl, time, pos)
-	if pos == pl:GetShootPos() then return end
-	pl:SetPos(pos)
-end, "Тилипотато.", StrategicColor})
-
 AddMagic(SWEP, {"Подайка",
 function(self, pl, time, pos)
 	local trace = pl:GetEyeTrace()

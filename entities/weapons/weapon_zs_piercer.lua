@@ -72,6 +72,7 @@ SWEP.NextLmao = 0
 SWEP.MeleeDamage = 50
 SWEP.MeleeRange = 100
 SWEP.MeleeSize = 8
+SWEP.MeleeKnockBack = 200
 SWEP.DefaultDamage = SWEP.MeleeDamage
 SWEP.DefaultRange = SWEP.MeleeRange
 
@@ -80,7 +81,7 @@ SWEP.Stamina = 28
 SWEP.WalkSpeed = SPEED_NORMAL*0.85	
 
 SWEP.Primary.Delay = 1.8
-SWEP.SwingTime = 0.5
+SWEP.SwingTime = 0.3
 
 SWEP.HitGesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_KNIFE
 SWEP.MissGesture = SWEP.HitGesture
@@ -203,7 +204,7 @@ function SWEP:Think()
 			self:SetNextSecondaryFire(CurTime() + self.ChargeDelay/2)
 		elseif self:GetChargePerc() < 1 then
 			if self.LastCharge <= CurTime() then
-				self:SetChargePerc(math.Clamp(self:GetChargePerc() + 0.015, 0, 1))
+				self:SetChargePerc(math.Clamp(self:GetChargePerc() + 0.025, 0, 1))
 				self:EmitSound(self.ChargeSound, 65, 60+70*self:GetChargePerc(), 0.4, CHAN_WEAPON)
 				self.LastCharge = CurTime() + 0.08
 			end	
