@@ -57,6 +57,7 @@ function SWEP:Think()
 
 	if SERVER then
 		local table2 = ents.FindByClass("prop_gunturret")
+		table.Add(table2,ents.FindByClass("prop_mortar_heavy"))
 		table.Add(table2,ents.FindByClass("prop_mortar"))
 		table.Add(table2,ents.FindByClass("prop_laser_turret"))
 		for _, ent in pairs(table2) do

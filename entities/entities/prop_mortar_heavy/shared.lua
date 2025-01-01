@@ -16,7 +16,7 @@ ENT.CanPackUp = true
 
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
-ENT.MaxUpgrades = 5
+ENT.MaxUpgrades = 7
 ENT.UpgradeCost = 8
 
 local NextCache = 0
@@ -25,27 +25,6 @@ local CachedFilter = {}
 function ENT:ShouldNotCollide(ent)
 	return ent:IsPlayer() and self:GetObjectOwner():IsPlayer() and ent:Team() == self:GetObjectOwner():Team()
 end
-
-function ENT:Use(activator, caller)
-	if self.Removing or not activator:IsPlayer() or self:GetMaterial() ~= "" then return end
-
-	if !self:GetObjectOwner():IsValid() then
-		self:SetObjectOwner(activator)
-		if not activator:HasWeapon("weapon_zs_gunturretcontrol") then
-			activator:Give("weapon_zs_gunturretcontrol")
-		end
-		return
-	end
-	if self:GetUpgrade() == self.MaxUpgrades and activator == self:GetObjectOwner() then
-		net.Start('zs_bounty_open')
-		net.WriteTable({{'Мортира',"Кидает снаряды в врагов.Броня не учитывается.\nЭффективно на среднем расстоянии.\nНа больших картах самый сок!","mortar"}
-	})
-		net.WriteEntity(self)
-		net.Send(activator)
-	end
-end
-
-
 function ENT:GetMaxAmmo()
 	return self.MaxAmmo + self:GetUpgrade()
 end
@@ -78,7 +57,7 @@ end
 function ENT:SetShieldDamage(dmg)
 	return self:SetDTFloat(12, dmg)
 end
-ENT.BaseDamageST = 65
+ENT.BaseDamageST = 85
 ENT.WhatUpgradeGive = { ["Урон"] = 12,
 ["Макс.патрон"] = {1,5},
 }
@@ -194,30 +173,26 @@ function ENT:DefaultPos()
 	return self:GetPos() + self:GetUp() * 55
 end
 ENT.WElements = {
-	["Turret"] = { type = "Model", model = "models/Combine_turrets/Floor_turret.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(31.136, 10, 2.969), angle = Angle(0, 0, 180), size = Vector(1, 1, 1), color = Color(255, 255, 255, 0), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
-	["cannon"] = { type = "Model", model = "models/hunter/tubes/tube4x4x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-15.734, 0.24, 21.742), angle = Angle(0, 0, 0), size = Vector(0.051, 0.051, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 2, bodygroup = {} },
-	["cannon+"] = { type = "Model", model = "models/props_phx/construct/metal_plate_curve360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, -7.514), angle = Angle(0, 0, 0), size = Vector(0.11, 0.11, 0.184), color = Color(235, 235, 235, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["cannon2"] = { type = "Model", model = "models/hunter/misc/cone4x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, -11.866), angle = Angle(0, -9.162, 180), size = Vector(0.051, 0.051, 0.072), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon"] = { type = "Model", model = "models/hunter/misc/squarecap1x1x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, 4.754), angle = Angle(0, 135, 180), size = Vector(0.202, 0.202, 0.3), color = Color(255, 114, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon2"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.016, 0.001, 14.268), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(0, 0, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon3"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.016, 0.001, 13.835), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(85, 43, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon4"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.017, 0, 13.375), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(127, 65, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon5"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.016, 0, 12.939), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(170, 87, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon6"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.017, 0.001, 12.497), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(212, 109, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon7"] = { type = "Model", model = "models/hunter/plates/platehole2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.017, 0.001, 12.051), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(195, 87, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["end of cannon8"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0.017, 0.001, 12.051), angle = Angle(0, 45, 0), size = Vector(0.101, 0.101, 0.15), color = Color(23, 23, 23, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/mat/mat_phx_debug", skin = 0, bodygroup = {} },
+	["Turret"] = { type = "Model", model = "models/Combine_turrets/Floor_turret.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(30.177, 0, 38.969), angle = Angle(0, 0, 180), size = Vector(1, 1, 1), color = Color(255, 255, 255, 0), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
+	["cannon"] = { type = "Model", model = "models/hunter/tubes/tube4x4x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-9.042, 0.24, 23.534), angle = Angle(-30.336, 0, 0), size = Vector(0.068, 0.068, 0.3), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 2, bodygroup = {} },
+	["cannon2"] = { type = "Model", model = "models/hunter/misc/shell2x2a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, -14.247), angle = Angle(0, -180, 180), size = Vector(0.156, 0.156, 0.1), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
+	["dno_cannon"] = { type = "Model", model = "models/hunter/tubes/circle4x4c.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, -7.467), angle = Angle(0, 112.946, 0), size = Vector(0.078, 0.078, 4.516), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
+	["dno_cannon2"] = { type = "Model", model = "models/hunter/tubes/circle4x4c.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, -7.467), angle = Angle(0, -67.213, 0), size = Vector(0.078, 0.078, 4.516), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
+	["end_cannon"] = { type = "Model", model = "models/props_phx/construct/metal_wire_angle360x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, 0.726), angle = Angle(0, 0, 0), size = Vector(0.146, 0.146, 0.146), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
+	["end_cannon2"] = { type = "Model", model = "models/hunter/tubes/tube4x4x2to2x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, 14.454), angle = Angle(0, 180, 180), size = Vector(0.092, 0.092, 0.092), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
+	["end_cannon3"] = { type = "Model", model = "models/hunter/tubes/circle4x4.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, 13.023), angle = Angle(0, 0, 0), size = Vector(0.067, 0.067, 0.067), color = Color(27, 27, 27, 255), surpresslightning = false, bonemerge = false, material = "metal/metalhull010b", skin = 0, bodygroup = {} },
+	["end_cannon4"] = { type = "Model", model = "models/props_phx/construct/metal_wire_angle360x2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "cannon", pos = Vector(0, 0, 0.726), angle = Angle(0, 9.138, 0), size = Vector(0.146, 0.146, 0.146), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
 	["osnova"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(0, 0, 5), angle = Angle(0, 0, 0), size = Vector(0.497, 0.497, 0.497), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
 	["osnova+"] = { type = "Model", model = "models/props_phx/construct/metal_angle360.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(0, 0, 0), angle = Angle(0, 0, 0), size = Vector(0.65, 0.65, 0.65), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "metal/metalcombine002", skin = 0, bodygroup = {} },
 	["osnova2"] = { type = "Model", model = "models/Mechanics/gears2/vert_18t1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(0, 0, 5.349), angle = Angle(0, 0, 0), size = Vector(1.286, 1.286, 1), color = Color(255, 0, 0, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
 	["osnova3"] = { type = "Model", model = "models/Mechanics/gears2/vert_18t1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(0, 0, 5.349), angle = Angle(0, -9.613, 0), size = Vector(1.286, 1.286, 1.011), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/concrete1", skin = 0, bodygroup = {} },
-	["regular"] = { type = "Model", model = "models/props_phx/trains/monorail_curve.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-20.467, 10.344, 4.442), angle = Angle(-81, -180, 90), size = Vector(0.037, 0.039, 0.2), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["regular2"] = { type = "Model", model = "models/props_phx/trains/monorail_curve.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-20.468, -4.39, 4.442), angle = Angle(-81, -180, 90), size = Vector(0.037, 0.039, 0.2), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["regular3"] = { type = "Model", model = "", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(0, 0, 0), angle = Angle(0, 0, 0), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["regular4"] = { type = "Model", model = "models/props_borealis/door_wheel001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-6.837, 10.029, 21.97), angle = Angle(0, -90, 0), size = Vector(1.069, 0.423, 0.423), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
-	["regular5"] = { type = "Model", model = "models/hunter/blocks/cube025x2x025.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-11.962, -6.136, 15.728), angle = Angle(0, 0, -90), size = Vector(0.25, 0.211, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["regular6"] = { type = "Model", model = "models/hunter/blocks/cube025x2x025.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-11.962, 9.577, 15.728), angle = Angle(0, 0, -90), size = Vector(0.25, 0.211, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["second regular"] = { type = "Model", model = "models/hunter/geometric/hex05x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-15.586, 6.539, 6.435), angle = Angle(-90, 90, 0), size = Vector(0.13, 0.13, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
-	["second regular2"] = { type = "Model", model = "models/hunter/geometric/hex05x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-15.586, -4.623, 6.435), angle = Angle(-90, 90, 0), size = Vector(0.13, 0.13, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} }
+	["regular"] = { type = "Model", model = "models/props_phx/trains/monorail_curve.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-20.467, 12.122, 4.442), angle = Angle(-81, -180, 90), size = Vector(0.037, 0.039, 0.2), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
+	["regular2"] = { type = "Model", model = "models/props_phx/trains/monorail_curve.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-20.468, -6.092, 4.442), angle = Angle(-81, -180, 90), size = Vector(0.037, 0.039, 0.2), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
+	["regular4"] = { type = "Model", model = "models/props_borealis/door_wheel001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-6.837, 11.68, 21.97), angle = Angle(0, -90, 0), size = Vector(1.069, 0.423, 0.423), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
+	["regular5"] = { type = "Model", model = "models/hunter/blocks/cube025x2x025.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-11.962, -7.266, 15.729), angle = Angle(0, 0, -90), size = Vector(0.25, 0.211, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
+	["regular6"] = { type = "Model", model = "models/hunter/blocks/cube025x2x025.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-11.962, 10.92, 15.728), angle = Angle(0, 0, -90), size = Vector(0.25, 0.211, 0.25), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
+	["second regular"] = { type = "Model", model = "models/hunter/geometric/hex05x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-15.586, 8.696, 6.436), angle = Angle(-90, 90, 0), size = Vector(0.13, 0.13, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} },
+	["second regular2"] = { type = "Model", model = "models/hunter/geometric/hex05x1.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "Turret", pos = Vector(-15.587, -6.719, 6.435), angle = Angle(-90, 90, 0), size = Vector(0.13, 0.13, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "phoenix_storms/iron_rails", skin = 0, bodygroup = {} }
 }
 function ENT:ShootPos()
 	local attachid = self.WElements['cannon'].modelEnt
